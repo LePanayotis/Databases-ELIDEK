@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>"<%= pageTitle %>"</title>
+    <link rel="stylesheet" href="/includes/styles.css">
+</head>
+
+<body>
+    <%- include("includes/navigate.ejs") %>
+    <aside>
+        <form id="upd_form" action="/projects/update" method="post" 
+        data-project_title="<%= project.project_title %>" data-funding="<%= project.funding %>"
+        data-starting_date="<%= project.starting_date %>" data-final_date="<%= project.final_date %>"
+        data-program_title="<%= project.program_title %>" data-manager_id="<%= project.manager_id %>"
+        data-score="<%= project.score %>" data-assessment_date="<%= project.assessment_date %>"
+        data-summary="<%= project.summary %>" data-assessor_id="<%= project.assessor_id %>" data-scientific_manager_id="<%= project.scientific_manager_id %>">
+            <table>
+                <tr>
+                    <td><label>Project title:</label></td>
+                    <td><input type="text" name="project_title" id="project_title_box" required></td>
+                </tr>
+                <tr>
+                    <td><label>Project funds:</label></td>
+                    <td>
+                        <input type="number" step="0.01" name="funding" id="funding_box" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Commence date:</label></td>
+                    <td><input type="date" name="starting_date" id="starting_date_box" required></td>
+                </tr>
+                <tr>
+                    <td><label>Final date:</label></td>
+                    <td><input type="date" name="final_date" id="final_date_box" required></td>
+                </tr>
+                <tr>
+                    <td><label>Related program:</label></td>
+                    <td><select name="program_title" id="program_title_box">
+                        <% programs.forEach((row, _) => { %>
+                            <option value="<%= row.title %>"><%= row.title %></option>
+                        <% }); %>
+                    </select></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Manager in charge:</label>
+                    </td>
+                    <td>
+                        <select name="manager_id" id="manager_id_box">
+                            <% managers.forEach((row, _) => { %>
+                                <option value="<%= row.manager_id %>"><%= row.manager_id +' ' + row.manager_name+' '+row.manager_surname %></option>
+                            <% }); %>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Scientific manager</label>
+                    </td>
+                    <td>
+                        <select name="scientific_manager_id" id="scientific_manager_id_box">
+                            <% add_researchers.forEach((row, _) => { %>
+                                <option value="<%= row.researcher_id %>"><%= row.researcher_id +' ' + row.researcher_name+' '+row.researcher_surname %></option>
+                            <% }); %>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Assesor:</label>
+                    </td>
+                    <td><select name="assessor_id" id="assessor_id_box">
+                        <% assessors.forEach((row, _) => { %>
+                            <option value="<%= row.researcher_id %>"><%= row.researcher_id + ' ' + row.researcher_name + ' ' + row.researcher_surname %></option>
+                        <% }); %>
+                    </select></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Assessment_date:</label>
+                    </td>
+                    <td>  <input type="date" name="assessment_date"  id="assessment_date_box" required></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>assessment score:</label>
+                    </td>
+                    <td>
+                        <input type="number" name="score" id="score_box">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Summary:</label>
+                    </td>
+                    <td><textarea name="summary" id="summary_box"></textarea></br>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="submit" >UPDATE</button>
+                        
+                    </td>
+                    <td>
+                        <button type="reset">RESET</button>
+                    </td>
+                </tr>
+            </table>
+            <input type="hidden" name="project_id" value="<%= project.project_id %>">
+        </form>
+        </aside>
+        <% if (researchers.length==0) { %>
+            <h1 style="margin-top: 5rem;">No projects found!</h1>
+            <% } else { %>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Researcher list</th>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% researchers.forEach((row, _)=> { %>
+                            <tr>
+                                <td>
+                                    <%= row.researcher_id %>
+                                </td>
+                                <td>
+                                    <%= row.researcher_name %>
+                                </td>
+                                <td>
+                                    <%= row.researcher_surname %>
+                                </td>
+                                <td>
+                                    <form action="/projects/remove_researcher" method="post">
+                                        <input type="hidden" name="project_id" value="<%= project.project_id %>">
+                                        <input type="hidden" name="researcher_id" value="<%= row.researcher_id %>">
+                                        <button type="submit">REMOVE</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <% }); %>
+                    </tbody>
+                </table>
+                <% } %>
+                <form action="/projects/add_researcher" method="post">
+                    <label>ADD RESEARCHER</label>
+                    <input type="hidden" name="project_id" value="<%= project.project_id %>">
+                    <select name="new_researcher">
+                        <% add_researchers.forEach((row, _) => { %>
+                            <option value="<%= row.researcher_id %>"><%= row.researcher_id + ' ' + row.researcher_name + ' ' + row.researcher_surname %></option>
+                        <% }); %>
+                    </select>
+                    <button type="submit">ADD</button>
+                </form>
+            </br>
+                <% if (scientific_fields.length==0) { %>
+                    <h1 style="margin-top: 5rem;">No projects found!</h1>
+                    <% } else { %>
+        
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>list of related scientific fields</th>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% scientific_fields.forEach((row, _)=> { %>
+                                    <tr>
+                                        <td>
+                                            <%= row.sf_subject %>
+                                        </td>
+                                        <td>
+                                            <form action="/projects/remove_field" method="post">
+                                                <input type="hidden" name="project_id" value="<%= project.project_id %>">
+                                                <input type="hidden" name="sf_subject" value="<%= row.sf_subject %>">
+                                                <button type="submit">REMOVE</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
+                        <% } %>
+                        <form action="/projects/add_field" method="post">
+                            <label>ADD scientific field </label>
+                            <input type="hidden" name="project_id" value="<%= project.project_id %>">
+                            <select name="sf_subject">
+                                <% all_sf_fields.forEach((row, _) => { %>
+                                    <option value="<%= row.sf_subject %>"><%= row.sf_subject %></option>
+                                <% }); %>
+                            </select>
+                            <button type="submit">ADD</button>
+                        </form>
+                    </br>
+                        <% if (reports.length==0) { %>
+                            <h1 style="margin-top: 5rem;">No reports found!</h1>
+                            <% } else { %>
+                
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Rerports list</th>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                        <% reports.forEach((row, _)=> { %>
+                                            <table>
+                                                <tr><td>
+                                                    <%= row.report_title %>
+                                                    </td>
+                                                </tr>
+                                                <tr><td>
+                                                    <%= row.report_summary %>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                    <%= row.due_date %>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                    <form action="/projects/remove_report" method="post">
+                                                        <input type="hidden" name="project_id" value="<%= project.project_id %>">
+                                                        <input type="hidden" name="report_title" value="<%= row.report_title%>">
+                                                        <button type="submit">REMOVE</button>
+                                                    </form>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <% }); %>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <% } %>
+                            </br>
+                                <form action="/projects/add_report" method="post">
+                                    <label>ADD REPORT</label></br>
+                                    <input type="hidden" name="project_id" value="<%= project.project_id %>">
+                                    <input type="text" name="report_title" required></br>
+                                    <textarea name="report_summary" required></textarea></br>
+                                    <input type="date" name="due_date" required>
+                                    <button type="submit">ADD REPORT</button>
+                                </form>
+                <script>
+
+                    
+                    function reset(){
+                        const forma = document.getElementById('upd_form').dataset;
+                        document.getElementById('project_title_box').value = forma.project_title
+                        document.getElementById('funding_box').value = forma.funding;
+                        document.getElementById('starting_date_box').value = forma.starting_date;
+                        document.getElementById('final_date_box').value = forma.final_date;
+                        document.getElementById('program_title_box').value = forma.program_title;
+                        document.getElementById('manager_id_box').value = forma.manager_id;
+                        document.getElementById('assessor_id_box').value = forma.assessor_id;
+                        document.getElementById('assessment_date_box').value = forma.assessment_date;
+                        document.getElementById('summary_box').value = forma.summary;
+                        document.getElementById('score_box').value = forma.score;
+                        document.getElementById('scientific_manager_id_box').value = forma.scientific_manager_id;
+                    }
+                    reset();
+
+                </script>
+                <%- include("includes/bottom.ejs") %>
+</body>
+
+</html>

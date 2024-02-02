@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>"<%= pageTitle %>"</title>
+    <link rel="stylesheet" href="/includes/styles.css">
+</head>
+
+<body>
+    <%- include("includes/navigate.ejs") %>
+        <h1>
+            <%= name %>
+        </h1>
+        <% if (projects.length==0) { %>
+            <h1 style="margin-top: 5rem;">No projects found!</h1>
+            <% } else { %>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Project List
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% projects.forEach((row, _)=> { %>
+                            <tr>
+                                <td>
+                                    <%= row.project_id %>
+                                </td>
+                                <td>
+                                    <%= row.project_title %>
+                                </td>
+                                <td>
+                                    <form action="/researchers/remove_project" method="post">
+                                        <input type="hidden" name="researcher_name" value="<%= name %>">
+                                        <input type="hidden" name="researcher_surname" value="<%= surname %>">
+                                        <input type="hidden" name="researcher_id" value="<%= id %>">
+                                        <input type="hidden" name="projectid" value="<%= row.project_id %>">
+                                        <button type="submit">REMOVE</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
+                <% } %>
+                    <form action="/researchers/append_project" method="post">
+                        <input type="hidden" name="researcher_name" value="<%= name %>">
+                        <input type="hidden" name="researcher_surname" value="<%= surname %>">
+                        <input type="hidden" name="researcher_id" value="<%= id %>">
+                        <select name="projectid">
+                            <% projectlist.forEach((row, _)=> { %>
+                                <option value="<%= row.project_id%>"><%= row.project_id +': '+ row.project_title%></option>
+                            <% }); %>
+                        </select>
+                        <button type="submit">ADD</button>
+                    </form>
+                    <%- include("includes/bottom.ejs") %>
+</body>
+
+</html>

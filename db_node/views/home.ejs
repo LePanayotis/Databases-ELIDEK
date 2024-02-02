@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>
+        <%= pageTitle %>
+    </title>
+</head>
+
+<body>
+    <%- include("includes/navigate.ejs") %>
+    <form action="/home/sf/" method="post">
+        <table>
+            <tr>
+            <td><label>Scientific field </label></td>
+       <td> <select name="sf_subject">
+            <% all_sf_fields.forEach((row, _) => { %>
+                <option value="<%= row.sf_subject %>"><%= row.sf_subject %></option>
+            <% }); %>
+        </select></td>
+       <td><button type="submit">INFO</button></td></tr>
+        </table>
+    </form>
+    </br>
+    </br>
+    <% if (over10.length==0) { %>
+        <h2>There are no organisations with the same number of projects in the last two years</h2>
+        <% } else {   %>
+            <h3>These are the organisations with the same number of projects in the past two years (> 10 projects) : </h3>
+            <table>
+                    <% over10.forEach((row, _)=> { %>
+                        <tr>
+                            <td>
+                                <%= row.org_name %>
+                            </td>
+                        </tr>
+                        <% }) %>
+            </table>
+            <% } %>
+        </br>
+    </br>
+            <% if (top3.length==0) { %>
+                <h2>There are no trending pairs</h2>
+                <% } else {   %>
+                    <table>
+                            <tr>
+                                <th>Scientific field pairs</th>
+                            </tr>
+                            <% top3.forEach((row, _)=> { %>
+                                <tr>
+                                    <td>
+                                        <%= row.subject1 + "-"+row.subject2 %>
+                                        </td>
+                                </tr>
+                                <% }) %>
+                    </table>
+                    <% } %>
+
+                </br>
+            </br>
+            <% if (young.length==0) { %>
+                <h2>There are no active young researchers </h2>
+                <% } else {   %>
+                    <h3>These are the most active young researchers:</h3>
+                    <table>
+                            <tr>
+                                <th>Researcher ID</th>
+                                <th>Name</th>
+                                <th>Surname</th>
+                                <th>Number of projects</th>
+                            </tr>
+                            <% young.forEach((row, _)=> { %>
+                                <tr>
+                                    <td>
+                                        <%= row.researcher_id %>
+                                    </td>
+                                    <td>
+                                        <%= row.researcher_name %>
+                                    </td>
+                                    <td>
+                                        <%= row.researcher_surname %>
+                                    </td>
+                                    <td>
+                                        <%= row.pr_number %>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                    </table>
+                    <% } %>
+                </br>
+            </br>
+                    <% if (lazy.length==0) { %>
+                        <h2>There are no lazy researchers </h2>
+                        <% } else {   %>
+                            <h2>These are the lazy researchers</h2>
+                            <table>
+                                    <tr>
+                                        <th>Researcher ID</th>
+                                        <th>Name</th>
+                                        <th>Surname</th>
+                                        <th>Number of projects</th>
+                                    </tr>
+                                    <% lazy.forEach((row, _)=> { %>
+                                        <tr>
+                                            <td>
+                                                <%= row.researcher_id %>
+                                            </td>
+                                            <td>
+                                                <%= row.researcher_name %>
+                                            </td>
+                                            <td>
+                                                <%= row.researcher_surname %>
+                                            </td>
+                                            <td>
+                                                <%= row.pr_number %>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                            </table>
+                            <% } %>
+                            <%- include("includes/bottom.ejs") %>
+</body>
+</html>

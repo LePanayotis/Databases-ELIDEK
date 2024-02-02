@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>
+        <%= pageTitle %>
+    </title>
+</head>
+
+<body>
+    <%- include("includes/navigate.ejs") %>
+
+    
+    <form id="add_form" action = "/managers/add" method="post">
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Surname</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td><input type="text" name="name" required></td>
+                <td><input type="text" name="surname" required></td>
+                <td><input id="sub" type="submit" value="ADD"></td>
+            </tr>
+        </table>
+    </form>
+        <% if (managers.length == 0) { %>
+            <h1>No managers found!</h1>
+            <% } else { %>
+                <form id="upd_form" action = "/managers/update/" method="post">
+                    <table>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Surname</th>
+                            
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <td><input type="text" name="id" id="manager_id" readonly required></td>
+                            <td><input type="text" name="name" id="manager_name"  required></td>
+                            <td><input type="text" name="surname" id="manager_surname" required></td>
+                            <td><input type="submit" value="UPDATE"></td>
+                        </tr>
+                    </table>
+                </form>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Surname</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% managers.forEach((row, _)=> { %>
+                            
+                            <tr>
+                                <td>
+                                    <%= row.manager_id %>
+                                </td>
+                                <td>
+                                    <%= row.manager_name %>
+                                </td>
+                                <td>
+                                    <%= row.manager_surname %>
+                                </td>
+                                <td>
+                                    <form method="post" action="/managers/delete">
+                                        <input type="hidden" name="id" value="<%= row.manager_id%>">
+                                        <button type="submit">
+                                            DELETE
+                                        </button>
+                                </td>
+                                <td>
+                                    <button type="button" onclick="setUpdtFields(this)"
+                                        data-id="<%= row.manager_id %>" data-name="<%= row.manager_name %>"
+                                        data-surname="<%= row.manager_surname %>">
+                                        EDIT
+                                    </button>
+                                    
+                                </td>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
+            </br>
+        </br>
+                <% if (sus.length==0) { %>
+                    <h2>There are no suspicious managers... </h2>
+                    <% } else {   %>
+                        <h2>They look kinda sus:</h2>
+                        <table>
+                                <tr>
+                                    <th>Manager ID</th>
+                                    <th>Name</th>
+                                    <th>Surname</th>
+                                    <th>Benefited Organisation</th>
+                                    <th>Total amount granted</th>
+                                </tr>
+                                <% sus.forEach((row, _)=> { %>
+                                    <tr>
+                                        <td>
+                                            <%= row.manager_id %>
+                                        </td>
+                                        <td>
+                                            <%= row.manager_name %>
+                                        </td>
+                                        <td>
+                                            <%= row.manager_surname %>
+                                        </td>
+                                        <td>
+                                            <%= row.org_name %>
+                                        </td>
+                                        <td>
+                                            <%= row.total_funding %>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                        </table>
+                        <% } %>
+                <% } %>
+                    <script>
+                        function setUpdtFields(row) {
+                            document.getElementById("manager_id").value = row.dataset.id;
+                            document.getElementById("manager_name").value = row.dataset.name;
+                            document.getElementById("manager_surname").value = row.dataset.surname;
+                        }
+                    </script>
+<%- include("includes/bottom.ejs") %>
+</body>
+</html>

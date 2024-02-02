@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title> <%= pageTitle %> </title>
+   <!-- <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">-->
+    <link rel="stylesheet" href="/includes/styles.css">
+</head>
+
+<body>
+    <%- include("includes/navigate.ejs") %>
+    <form action="/projects" method="post">
+        <table>
+            <tr>
+                <th>
+                    Managed By
+                </th>
+                <th>
+                    Starts on
+                </th>
+                <th>
+                    Duration(years)
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <select name="manager_id">
+                            <option value="ANY">ANY</option>
+                        <% managers.forEach((row, _) => { %>
+                            <option value="<%= row.manager_id %>"><%= row.manager_id+" "+row.manager_name +" "+ row.manager_surname %></option>
+                        <% }); %>
+                    </select>
+                </td>
+                <td>
+                    <input type="date" name="starting_date"></br>
+                </td>
+                <td>
+                    <input type="number" name="duration"></br>
+                </td>
+            </tr>
+        </table>
+        <button type="submit">SEARCH</button>
+        <button type="reset">CLEAR</button>
+    </form>
+</br>
+</br>
+<h3>ADD PROJECT</h3>
+    <form id="add_form" action="/projects/add/" method="post">
+        <table>
+            <tr><td>
+                <label>Project title:</label>
+            </td>
+        <td>
+            <input type="text" name="project_title" required>
+        </td></tr>
+            <tr>
+                <td>
+                    <label>Project funds:</label>
+                </td>
+                <td>
+                    <input type="number" name="funding" required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Commence date:</label>
+                </td>
+                <td>
+                    <input type="date" name="starting_date" required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Final date:</label>
+                </td>
+                <td>
+                    <input type="date" name="final_date" required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Related program</label>
+                </td>
+                <td>
+                    <select name="program_title">
+                        <% programs.forEach((row, _) => { %>
+                            <option value="<%= row.title %>"><%= row.title %></option>
+                        <% }); %>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Manager in charge:</label>
+                </td>
+                <td>
+                    <select name="manager_id">
+                        <% managers.forEach((row, _) => { %>
+                            <option value="<%= row.manager_id %>"><%= row.manager_id +' ' + row.manager_name+' '+row.manager_surname %></option>
+                        <% }); %>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Organisation:</label>
+                </td>
+                <td>
+                    <select name="org_name">
+                        <% orgs.forEach((row, _) => { %>
+                            <option value="<%= row.org_name %>"><%= row.org_name %></option>
+                        <% }); %>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Scientific manager</label>
+                </td>
+                <td>
+                    <select name="scientific_manager_id" id="scientific_manager_id_box">
+                        <% assessors.forEach((row, _) => { %>
+                            <option value="<%= row.researcher_id %>"><%= row.researcher_id +' ' + row.researcher_name+' '+row.researcher_surname %></option>
+                        <% }); %>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Assesor:</label>
+                </td>
+                <td>
+                    <select name="assessor_id">
+                        <% assessors.forEach((row, _) => { %>
+                            <option value="<%= row.researcher_id %>"><%= row.researcher_id + ' ' + row.researcher_name + ' ' + row.researcher_surname %></option>
+                        <% }); %>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Assessment_date:</label>
+                </td>
+                <td>
+                    <input type="date" name="assessment_date" required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Assessment score:</label>
+                </td>
+                <td>
+                    <input type="number" name="score"></br>
+                </td>
+            </tr>
+       <tr><td><label>Summary:</label></td>
+        <td><textarea name="summary"></textarea></td></tr>
+        
+    </table>
+        <button type="submit" value="ADD">NEW PROJECT</button>
+    </form>
+                    <% if (projects.length == 0) { %> 
+                        <h1 style="margin-top: 5rem;">No projects found!</h1>
+                    <% } else { %>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Project title</th>
+                                        
+                                        <th>Funds</th>
+                                        
+                                        <th>Finished on</th>
+                                        <th>Related program</th>
+                                 
+                                        <th>Organisation</th>
+                                      
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% projects.forEach((pro, _) => { %>
+                                        <tr>
+                                            <td><%= pro.project_id %></td>
+                                            <td><%= pro.project_title %></td>
+                                            
+                                            <td><%= pro.funding %></td>
+                                            
+                                            <td><%= pro.final_date %></td>
+                                            <td><%= pro.program_title %></td>
+                                            
+                                            <td><%= pro.org_name %></td>
+                                            <td>
+                                                <form action ="/projects/details" method="post">
+                                                    <input type="hidden" name="org_name" value="<%= pro.org_name %>">
+                                                    <input type="hidden" name="project_id" value="<%= pro.project_id %>">
+                                                    <button type="submit">MORE</button>
+                                                </form>
+                                            </td>
+
+                                            <td>
+                                                <form action = "/projects/delete" method="post">
+                                                    <input type="hidden" name="project_id" value="<%= pro.project_id %>">
+                                                    <button type="submit" >DELETE</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                    <% } %>
+                    <%- include("includes/bottom.ejs") %>
+</body>
+
+</html>

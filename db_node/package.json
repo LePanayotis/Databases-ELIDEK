@@ -1,0 +1,24 @@
+{
+  "name": "db_node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "connect-flash": "^0.1.1",
+    "ejs": "^3.1.8",
+    "express": "^4.18.1",
+    "express-session": "^1.17.3",
+    "faker": "^6.6.6",
+    "http": "^0.0.1-security",
+    "nodemon": "^2.0.16",
+    "pg": "^8.7.3"
+  }
+}

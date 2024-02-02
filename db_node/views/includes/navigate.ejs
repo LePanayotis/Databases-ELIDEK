@@ -1,0 +1,86 @@
+ <header>
+    <img src="https://www.elidek.gr/wp-content/uploads/2017/06/ELIDEK_Logo_featured.png" alt="HFRI" width="180">
+    <nav>
+        <ul class="nav__links">
+            <li><a href="/home">Home</a></li>
+            <li><a href="/projects">Projects</a></li>
+            <li><a href="/organisations">Organisations</a></li>
+            <li><a href="/managers">Managers</a></li>
+            <li><a href="/researchers">Researchers</a></li>
+            <li><a href="/programs">Programs</a></li>
+        </ul>
+    </nav>
+</header>
+
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Play&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: auto;
+    background-color: #24252a;
+    font-family: "Play" , sans-serif;
+    color: #edf0f1;
+}
+
+li , a , button {
+    font-family: "Play" , sans-serif;
+    font-weight: 500;
+    font-size: 16;
+    
+    text-decoration: none;
+
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 10%;
+}
+
+.nav__links{
+    list-style: none;
+}
+
+.nav__links li {
+    display: inline-block;
+    padding: 0px 20px;
+}
+
+.nav__links li a {
+    transition: all 0.3s ease 0s;
+}
+
+.nav__links li a:hover{
+    color: #0088a9;
+}
+
+button {
+    padding: 9px 25px;
+    background-color: rgba(0,136,169,1);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+}
+
+button:hover{
+    background-color: rgba(0,136,169,0.8);
+}
+
+.table {
+    margin: 25px 0px 0px 0px;
+    min-width: 500px;
+    border-radius: 5px 5px 0;
+    box-shadow: rgba(0,0,00.1);
+    overflow: hidden;
+
+}
+.table thead tr {
+    background-color: #009879;
+    color: #FFFFFF;
+}
+</style>

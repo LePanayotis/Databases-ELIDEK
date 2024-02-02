@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>
+        <%= pageTitle %>
+    </title>
+    <link rel="stylesheet" href="/includes/styles.css">
+</head>
+
+<body>
+    <%- include("includes/navigate.ejs") %>
+
+
+        <form id="add_form" action="/programs/add/" method="post">
+            <table>
+                <tr>
+                    <th>
+                        Title
+                    </th>
+                    <th>
+                        Department
+                    </th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td><input type="text" name="title" required></td>
+                    <td><input type="text" name="department" required></td>
+                    <td><input id="sub" type="submit" value="ADD"></td>
+                </tr>
+
+            </table>
+            
+            
+        </form>
+        <% if (programs.length==0) { %>
+            <h1 style="margin-top: 5rem;">No programs found!</h1>
+            <% } else { %>
+                <form id="upd_form" action="/programs/update/" method="post">
+                    <input type="text" name="title" id="title_box" readonly required>
+                    <input type="text" name="department" id="department_box" required>
+                    <input type="submit" value="UPDATE">
+                </form>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Department</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% programs.forEach((row, _)=> { %>
+                            <tr>
+                                <td>
+                                    <%= row.title %>
+                                </td>
+                                <td>
+                                    <%= row.department %>
+                                </td>
+                                <td>
+                                    <form method="post" action="/programs/delete">
+                                        <input type="hidden" name="title" value="<%= row.title %>">
+                                        <button type="submit">
+                                            DELETE
+                                        </button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <button type="button" onclick="setUpdtFields(this)"
+                                        data-title="<%= row.title %>" data-department="<%= row.department %>">
+                                        EDIT
+                                    </button>
+                                    
+                                </td>
+                            </tr>
+                            
+                            <% }) %>
+                    </tbody>
+                </table>
+                <% } %>
+                <script>
+                    function setUpdtFields(row) {
+                        document.getElementById("title_box").value = row.dataset.title;
+                        document.getElementById("department_box").value = row.dataset.department;
+                    }
+                </script>
+                <%- include("includes/bottom.ejs") %>
+</body>
+
+</html>

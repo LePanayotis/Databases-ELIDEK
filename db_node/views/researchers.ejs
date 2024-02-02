@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>
+        <%= pageTitle %>
+    </title>
+    <link rel="stylesheet" href="/includes/styles.css">
+</head>
+
+<body>
+    <%- include("includes/navigate.ejs") %>
+    <form id="add_form" action="/researchers/add/" method="post">
+        <table>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>Surname</th>
+                <th>Date of birth</th>
+                <th>Contract date</th>
+                <th>Gender</th>
+                <th>Organisation</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td>
+                    <input type="text" name="researcher_name"   required>
+                </td>
+                <td><input type="text" name="researcher_surname" required></td>
+                <td><input type="date" name="date_of_birth" required></td>
+                <td> <input type="date" name="contract_date" required></td>
+                <td><select name="gender">
+                    <option value="M">M</option>
+                    <option value="F">F</option>
+                    <option value="U">U</option>
+                </select></td>
+                <td>
+                    <select name="org_name">
+                        <% orgs.forEach((row, _)=> { %>
+                            <option value="<%= row.org_name %>"><%= row.org_name %></option>
+                        <% }); %>
+                    </select>
+                </td>
+                <td>
+                    <input type="submit" value="ADD">
+                </td>
+            </tr>
+        </table>
+    </form>
+        <% if (researchers.length==0) { %>
+            <h1 style="margin-top: 5rem;">No researchers found!</h1>
+            <% } else { %>
+            </br>
+        </br>
+                <form id="upd_form" action="/researchers/update/" method="post">
+                    <table>
+                        <tr>
+                            <th>ID</th>
+                            <th>
+                                Name
+                            </th>
+                            <th>Surname</th>
+                            <th>Date of birth</th>
+                            <th>Contract date</th>
+                            <th>Gender</th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" name="researcher_id" id="id_box" readonly required>
+                            </td>
+                            <td><input type="text" name="researcher_name"  id="name_box" required></td>
+                            <td><input type="text" name="researcher_surname" id="surname_box" required></td>
+                            <td><input type="date" name="date_of_birth" id="birthday_box" ></td>
+                            <td><input type="date" name="contract_date" id="contract_date_box" ></td>
+                            <td><select id="gender_box" name="gender">
+                                <option value="M">M</option>
+                                <option value="F">F</option>
+                                <option value="U">U</option>
+                            </select></td>
+                            <td> 
+                                <input type="submit" value="UPDATE"></td>
+                        </tr>
+                    </table>                  
+                </form>
+            </br></br>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Surname</th>
+                                <th>Gender</th>
+                                <th>Age</th>
+                                <th>Contract Date</th>
+                                <th>Works for</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% researchers.forEach((row, _)=> { %>
+                                <tr>
+                                    <td>
+                                        <%= row.researcher_id %>
+                                    </td>
+                                    <td>
+                                        <%= row.researcher_name %>
+                                    </td>
+                                    <td>
+                                        <%= row.researcher_surname%>
+                                    </td>
+                                    <td>
+                                        <%= row.gender%>
+                                    </td>
+                                    <td>
+                                        <%= row.age.years %>
+                                    </td>
+                                    <td>
+                                        <%= row.contract_date %>
+                                    </td>
+                                    <td>
+                                        <%= row.org_name %>
+                                    </td>
+                                    <td>
+                                        <form action="/researchers/details/" method="POST">
+                                            <input type="hidden" name="researcher_id" value="<%= row.researcher_id %>">
+                                            <button type="submit">
+                                                SEE DETAILS</button>
+                                            </form>
+                                    </td>
+                                    <td>
+                                        <form method="post" action="/researchers/delete">
+                                            <input type="hidden" name="researcher_id" value="<%= row.researcher_id %>">
+                                            <button type="submit">
+                                                DELETE
+                                            </button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <button type="button" onclick="setUpdtFields(this)"
+                                            data-researcher_id="<%= row.researcher_id %>" data-researcher_name="<%= row.researcher_name %>"
+                                            data-researcher_surname="<%= row.researcher_surname %>"
+                                            data-gender="<%= row.gender %>" data-date_of_birth="<%= row.date_of_birth %>"
+                                            data-contract_date="<%= row.contract_date %>"
+                                            data-org_name="<%= row.org_name %>">
+                                            EDIT
+                                        </button>
+                                    </td>
+
+                                    <% }) %>
+                        </tbody>
+                    </table>
+                    <% } %>
+                    <script>                        
+                        function setUpdtFields(row) {
+                            document.getElementById("name_box").value = row.dataset.researcher_name;
+                            document.getElementById("surname_box").value = row.dataset.researcher_surname;
+                            document.getElementById("birthday_box").value = row.dataset.date_of_birth;
+                            document.getElementById("contract_date_box").value = row.dataset.contract_date;
+                            document.getElementById("id_box").value = row.dataset.researcher_id;
+                            document.getElementById("gender_box").value = row.dataset.gender;
+                        }
+                    </script>
+<%- include("includes/bottom.ejs") %>
+</body>
+
+</html>

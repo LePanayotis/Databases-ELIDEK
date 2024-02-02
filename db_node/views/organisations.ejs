@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>
+        <%= pageTitle %>
+    </title>
+
+    <link rel="stylesheet" href="/includes/styles.css">
+</head>
+
+<body>
+    <%- include("includes/navigate.ejs") %>
+    <form id="add_form" action="/organisations/add/" method="post">
+        <label>ADD NEW ORGANISATION</label></br>
+        <table>
+            <tr>
+                <td>
+                    Organisation Name
+                </td>
+                <td>
+                    Abbreviation
+                </td>
+                <td>
+                    Street
+                </td>
+                <td>
+                    Street Number
+                </td>
+                <td>
+                    Postal Code
+                </td>
+                <td>
+                    City
+                </td>
+                <td>
+                    Type
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="text" name="org_name" required>
+                </td>
+                <td><input type="text" name="abbreviation" required></td>
+                <td> <input type="text" name="street" required></td>
+                <td> <input type="text" name="street_number"></td>
+                <td><input type="text" name="postal_code" required></td>
+                <td>   <input type="text" name="city" required></td>
+                <td> <select name="category">
+                    <option value="university">University</option>
+                    <option value="research_center">Research center</option>
+                    <option value="corporation">Corporation</option>
+                </select></td>
+                <td><input type="submit" value="ADD"></td>
+            </tr>
+        </table>        
+    </form>
+</br>
+        <% if (orgs.length==0) { %>
+  
+
+            <h1 style="margin-top: 5rem;">No organisations found!</h1>
+            <% } else {   %>
+                <form id="upd_form" action="/organisations/update/" method="post">
+                    <label>UPDATE</label></br>
+                    <table>
+                        <tr>
+                            <td>
+                                Organisation Name
+                            </td>
+                            <td>
+                                Abbreviation
+                            </td>
+                            <td>
+                                Street
+                            </td>
+                            <td>
+                                Street Number
+                            </td>
+                            <td>
+                                Postal Code
+                            </td>
+                            <td>
+                                City
+                            </td>
+                            <td></td>
+                        </tr>
+                   <tr>
+                       <td><input type="text" name="org_name" id="org_name_box" readonly required></td>
+                       <td><input type="text" name="abbreviation" id="abbreviation_box" required></td>
+                        <td><input type="text" name="street" id="street_box" required></td>
+                            <td><input type="text" name="street_number" id="street_number_box"></td>
+                                <td><input type="text" name="postal_code" id="postal_code_box" required></td>
+                                    <td><input type="text" name="city" id="city_box" required></td>
+                                        <td> <input type="submit" value="UPDATE"></td></tr>
+                    
+                </form>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Organisation name</th>
+                            <th>Abbreviation</th>
+                            <th>Address</th>
+                            <th>Category</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% orgs.forEach((row, _)=> { %>
+                            <tr>
+                                <td>
+                                    <%= row.org_name %>
+                                </td>
+                                <td>
+                                    <%= row.abbreviation %>
+                                </td>
+                                <td>
+                                    <%= row.street.concat(", ", row.street_number," , ",row.postal_code," , ",row.city) %>
+                                </td>
+                                <td><%= row.category %></td>
+                                <td>
+                                    <form action="/organisations/details/" method="POST">
+                                        <input type="hidden" name="org_name" value="<%= row.org_name %>">
+                                        <input type="hidden" name="category" value="<%= row.category %>">
+                                        <button type="submit">
+                                            SEE DETAILS</button>
+                                        </form>
+                                </td>
+                                <td>
+                                    <form method="post" action="/organisations/delete">
+                                        <input type="hidden" name="org_name" value="<%= row.org_name %>">
+                                        <input type="hidden" name="category" value="<%= row.category %>">
+                                        <button type="submit">
+                                            DELETE
+                                        </button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <button type="button" onclick="setUpdtFields(this)"
+                                        data-org_name="<%= row.org_name %>" data-street="<%= row.street %>"
+                                        data-street_number="<%= row.street_number %>"
+                                        data-postal_code="<%= row.postal_code %>" data-city="<%= row.city %>"
+                                        data-abbreviation="<%= row.abbreviation %>">
+                                        EDIT
+                                    </button>
+                                </td>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
+
+                <% } %>
+                    <script>
+                        function setUpdtFields(row) {
+                            document.getElementById("org_name_box").value = row.dataset.org_name;
+                            document.getElementById("street_box").value = row.dataset.street;
+                            document.getElementById("city_box").value = row.dataset.city;
+                            document.getElementById("street_number_box").value = row.dataset.street_number;
+                            document.getElementById("postal_code_box").value = row.dataset.postal_code;
+                            document.getElementById("abbreviation_box").value = row.dataset.abbreviation;
+                        }
+                    </script>
+                    <%- include("includes/bottom.ejs") %>
+</body>
+
+</html>

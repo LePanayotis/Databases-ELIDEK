@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>"<%= pageTitle %>"</title>
+    <link rel="stylesheet" href="/includes/styles.css">
+</head>
+
+<body>
+    <%- include("includes/navigate.ejs") %>
+        <h1>
+            <%= org_name %>
+        </h1>
+    </br>
+</br>
+        <% if (category == "university") { %>
+            <form action="/organisations/update_budgets" method="post">
+                <label>Public funds:</label></br>
+                <label><%= budgets.public_funds %></label><input type="text" name="public_funds" required></br>
+                
+                <input type="hidden" name="org_name" value="<%= org_name %>">
+                <input type="hidden" name="category" value="<%= category %>">
+                <input type="submit" value="UPDATE" >
+            </form>
+        <% } else if (category == "corporation") { %>
+            <form action="/organisations/update_budgets" method="post">
+                <label>Private funds:</label></br>
+                <label><%= budgets.private_funds %></label><input type="text" name="private_funds" required></br>
+                
+                <input type="hidden" name="org_name" value="<%= org_name %>">
+                <input type="hidden" name="category" value="<%= category %>">
+                <input type="submit" value="UPDATE" >
+            </form>
+        <% } else { %>
+            <form action="/organisations/update_budgets" method="post">
+                <label>Private funds:</label></br>
+                <label><%= budgets.private_funds %></label><input type="text" name="private_funds" required></br>
+                <label>Public funds:</label></br>
+                <label><%= budgets.public_funds %></label><input type="text" name="public_funds" required></br>
+                
+                
+                <input type="hidden" name="org_name" value="<%= org_name %>">
+                <input type="hidden" name="category" value="<%= category %>">
+                <input type="submit" value="UPDATE" >
+            </form>
+        <% } if (numbers.length==0) { %>
+            <h1 style="margin-top: 5rem;">No tel numbers found!</h1>
+            <% } else { %>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Telephone List
+                            </tr>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% numbers.forEach((row, _)=> { %>
+                            <tr>
+                                <td>
+                                    <%= row.t_number %>
+                                </td>
+                                <td>
+                                    <form action="/organisations/delete_telephone" method="post">
+                                        <input type="hidden" name="org_name" value="<%= org_name %>">
+                                        <input type="hidden" name="category" value="<%= category %>">
+                                        <input type="hidden" name="telephone_number" value="<%= row.t_number %>">
+                                        <button type="submit">DELETE</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
+                <% } %>
+                    <form action="/organisations/add_telephone" method="post">
+                        <input type="hidden" name="org_name" value="<%= org_name %>">
+                        <input type="hidden" name="category" value="<%= category %>">
+                        <input type="number" name="telephone_number">
+                        <button type="submit">ADD</button>
+                    </form>
+                    <%- include("includes/bottom.ejs") %>
+</body>
+
+</html>
